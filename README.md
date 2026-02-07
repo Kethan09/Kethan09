@@ -1,60 +1,85 @@
-# Laptop Screen Monitor Agent (Telegram)
+# Telegram SMC/ICT Trading Bot (Alerts + Paper Trading)
 
-This project is a minimal starter agent that:
-
-1. Captures your laptop screen.
-2. Extracts text from the screenshot (OCR).
-3. Sends the extracted text to Telegram.
-
-It also provides a hook where you can add AI analysis so the agent can answer questions found on-screen and send responses to Telegram.
+A modular Python 3.10+ trading bot for Telegram-driven SMC/ICT-style scanning, grading, and optional auto-execution. Default mode runs alerts + paper trading. Auto execution is protected behind `/mode auto` and `/arm` safety toggles.
 
 ## Features
 
-- Telegram bot with `/scan` command.
-- Full-screen capture using `mss`.
-- OCR via `pytesseract`.
-- Pluggable `analyze_question()` function for AI-based answers.
+- Multi-timeframe SMC/ICT scanning (swing/day/scalp)
+- BOS/CHOCH, liquidity sweep, FVG, and order block detection
+- Premium/discount filtering
+- Setup grading (A+ to C)
+- Risk and trading limit enforcement
+- CSV-based data provider (MVP)
+- Paper trading execution (always available)
+- MT5 live execution stub (behind toggles)
+- Telegram bot commands and aliases
 
-## Requirements
+## Project Structure
 
-- Python 3.10+
-- Tesseract installed locally (for OCR). Example (Ubuntu):
-  ```bash
-  sudo apt-get install tesseract-ocr
-  ```
-- Telegram bot token and chat ID.
+```
+src/
+  bot/telegram_bot.py
+  strategy/smc.py
+  strategy/scoring.py
+  risk/risk.py
+  data/providers.py
+  execution/paper.py
+  execution/live_mt5.py
+  utils/time.py
+config.yaml
+```
 
-## Setup
+## Setup (Windows)
 
-1. Install Python dependencies:
-   ```bash
+1. **Install Python 3.10+**
+   - Download from https://www.python.org/downloads/windows/
+
+2. **Create a virtual environment**
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+3. **Install dependencies**
+   ```powershell
    pip install -r requirements.txt
    ```
-2. Export environment variables:
-   ```bash
-   export TELEGRAM_BOT_TOKEN="your-token"
-   export TELEGRAM_CHAT_ID="your-chat-id"
+
+4. **Add your Telegram bot token**
+   - Save your bot token to a file named `.telegram_token` in the repo root.
+
+5. **Provide CSV data**
+   - Create a `data/` folder in the repo root.
+   - Add files like `xauusd_1H.csv`, `xauusd_15m.csv` (headers: `timestamp,open,high,low,close,volume`).
+
+6. **Run the bot**
+   ```powershell
+   python -m src.bot.telegram_bot
    ```
-3. Run the bot:
-   ```bash
-   python -m src.agent
-   ```
 
-## Usage
+## Telegram Commands
 
-In Telegram, open your bot and run:
+- `/help`
+- `/status`
+- `/mode alerts` or `/mode auto`
+- `/arm` / `/disarm`
+- `/scan <symbol> <style>` (example: `/scan xauusd day`)
 
-```
-/scan
-```
-
-The bot will capture your current screen, run OCR, and return the extracted text. You can then implement `analyze_question()` to use an AI model and respond with the answer instead of raw OCR.
-
-## Adding AI Analysis
-
-Update `analyze_question()` in `src/agent.py` to call your preferred model (OpenAI, local LLM, etc.). The function currently returns the raw OCR text to keep the project dependency-light.
+### Aliases
+- `/xauswing`, `/xauday`, `/xauscalp`
+- `/eurusdday`
+- `/gbpjpyswing`
+- `/nas100day`
+- `/us30scalp`
 
 ## Notes
 
-- For WhatsApp support, use the WhatsApp Business API or a provider like Twilio. This repository focuses on Telegram for a clean baseline.
-- You should secure access to your bot token and avoid exposing it in code or logs.
+- Default mode is alerts + paper trading.
+- Live execution requires `/mode auto` and `/arm`, and the symbol must be allowlisted.
+- CSV provider is the MVP; add MT5/OANDA/Binance data providers as needed.
+
+## Tests
+
+```powershell
+pytest
+```
