@@ -1,0 +1,48 @@
+data_dir: data
+account_balance: 100000.0
+allowlist:
+  - xauusd
+  - nas100
+  - us30
+symbol_map:
+  xauusd: ["XAUUSD", "GOLD"]
+  audusd: ["AUDUSD"]
+  eurusd: ["EURUSD"]
+  gbpusd: ["GBPUSD"]
+  nzdusd: ["NZDUSD"]
+  eurjpy: ["EURJPY"]
+  gbpjpy: ["GBPJPY"]
+  usdcad: ["USDCAD"]
+  usdjpy: ["USDJPY"]
+  nas100: ["NAS100", "USTEC", "US100"]
+  us30: ["US30", "DJ30", "US30.cash"]
+  dxy: ["DXY", "USDX", "DOLLAR"]
+  btcusd: ["BTCUSD"]
+styles:
+  swing:
+    htf: ["1D", "4H"]
+    entry: ["1H", "15m"]
+  day:
+    htf: ["4H", "1H"]
+    entry: ["15m", "5m"]
+  scalp:
+    htf: ["15m"]
+    entry: ["5m", "1m"]
+risk:
+  risk_per_trade: 0.002
+  max_open_trades: 3
+  max_daily_loss: 1000.0
+  max_weekly_loss: 3000.0
+  cooldown_after_loss_minutes: 60
+  swing_lookback: 2
+  sweep_lookahead: 3
+  fvg_min_size: 0.2
+  displacement_threshold: 0.5
+spread_filter:
+  forex: 1.5
+  indices: 2.0
+  btcusd: 30.0
+broker_hours:
+  forex:
+    open: "00:05"
+    close: "23:55"
