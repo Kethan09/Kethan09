@@ -48,14 +48,49 @@ config.yaml
 4. **Add your Telegram bot token**
    - Save your bot token to a file named `.telegram_token` in the repo root.
 
-5. **Provide CSV data**
-   - Create a `data/` folder in the repo root.
-   - Add files like `xauusd_1H.csv`, `xauusd_15m.csv` (headers: `timestamp,open,high,low,close,volume`).
-
-6. **Run the bot**
+5. **Run the bot**
    ```powershell
    python -m src.bot.telegram_bot
    ```
+
+
+## App Mode (AI Trading Assistant - Live Data)
+
+You can run a Streamlit app with online market data (no CSV files needed):
+
+```powershell
+streamlit run src/app/trading_app.py
+```
+
+What the app does:
+- Select symbol + style from your config
+- Pull online OHLCV market candles from Yahoo Finance
+- Run the same SMC/ICT setup builder used by the bot
+- Show AI-style suggestion with entry, SL, TP, RR, grade, and risk-based position sizing
+
+### Android / APK path
+
+This app is built in Streamlit (web app). To use on phone:
+
+1. Deploy Streamlit app (Render/Railway/VM).
+2. Open from mobile browser and install as web app (PWA style).
+3. If you need an `.apk`, wrap the deployed URL using an Android WebView wrapper (for example Android Studio `WebView` shell or trusted web activity toolchain).
+
+
+
+## Trading Rules Used by the App
+
+The app uses the same SMC/ICT rule pipeline as the strategy module:
+
+1. Detect HTF structure (BOS/CHOCH) and set directional bias.
+2. Require a liquidity sweep on entry timeframe in the opposite side of liquidity.
+3. Require post-sweep confirmation (CHOCH + BOS in bias direction).
+4. Select POI from order block / fair value gap with premium-discount filter.
+5. Build setup with entry, stop, target, and enforce minimum RR >= 3.
+6. Grade setup quality (A+ to C) with the scoring model and show reasons.
+7. Position size is computed from account balance, risk per trade, and stop distance.
+
+Forex pairs now mapped online include: EURUSD, GBPUSD, USDJPY, AUDUSD, NZDUSD, USDCAD, EURJPY, GBPJPY.
 
 ## Telegram Commands
 

@@ -4,6 +4,19 @@ allowlist:
   - xauusd
   - nas100
   - us30
+online_symbol_map:
+  xauusd: "GC=F"
+  nas100: "^NDX"
+  us30: "^DJI"
+  eurusd: "EURUSD=X"
+  audusd: "AUDUSD=X"
+  nzdusd: "NZDUSD=X"
+  usdcad: "USDCAD=X"
+  eurjpy: "EURJPY=X"
+  gbpjpy: "GBPJPY=X"
+  gbpusd: "GBPUSD=X"
+  usdjpy: "USDJPY=X"
+  btcusd: "BTC-USD"
 symbol_map:
   xauusd: ["XAUUSD", "GOLD"]
   audusd: ["AUDUSD"]
